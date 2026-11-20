@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tea Chain Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f3ed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .login {
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            width: 320px;
+            box-shadow: 0 3px 15px #0002;
+        }
+        h2 { text-align: center; color: #35634b; }
+        input, button {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 12px;
+            margin-top: 14px;
+        }
+        button {
+            background: #35634b;
+            color: white;
+            border: 0;
+            cursor: pointer;
+        }
+        #message { text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="login">
+        <h2>Tea Chain</h2>
+        <h3>Login</h3>
+        <input id="username" placeholder="Username">
+        <input id="password" type="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        async function login() {
+            const message = document.getElementById("message");
+            try {
+                const response = await fetch("/api/login", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        username: document.getElementById("username").value,
+                        password: document.getElementById("password").value
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    message.textContent = data.error || "Login failed";
+                    return;
+                }
+
+                localStorage.setItem("token", data.token);
+                message.textContent = "Login successful!";
+            } catch (error) {
+                message.textContent = "Cannot connect to server";
+            }
+        }
+    </script>
+</body>
+</html>
