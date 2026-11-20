@@ -42,6 +42,19 @@ docker compose ps
 curl http://localhost:5000/api/health
 ```
 
+### 6. 建立測試帳號
+第一次啟動（或執行 `docker compose down -v` 清除資料庫）後，需要先建立測試帳號：
+```bash
+curl -X POST http://localhost:5000/api/setup
+```
+
+### 7. 登入系統
+用瀏覽器開啟 http://localhost:8080 ，使用以下測試帳號登入：
+
+| 帳號 | 密碼 |
+|------|------|
+| `owner` | `Owner123!` |
+
 ## 目前功能
 - 使用者登入
 - JWT 身分驗證

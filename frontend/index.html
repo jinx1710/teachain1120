@@ -68,7 +68,7 @@
                     return;
                 }
 
-                localStorage.setItem("token", data.token);
+                localStorage.setItem("token", data.access_token);
                 message.textContent = "Login successful!";
             } catch (error) {
                 message.textContent = "Cannot connect to server";
