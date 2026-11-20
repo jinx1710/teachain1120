@@ -1,0 +1,42 @@
+
+services:
+  database:
+    image: postgres:16-alpine
+    container_name: tea_database
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: tea_chain
+      POSTGRES_USER: tea_admin
+      POSTGRES_PASSWORD: tea_password_123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - tea_network
+
+  backend:
+    build: ./backend
+    container_name: tea_backend
+    restart: unless-stopped
+    environment:
+      DB_HOST: database
+      DB_NAME: tea_chain
+      DB_USER: tea_admin
+      DB_PASSWORD: tea_password_123
+      DB_PORT: 5432
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+    ports:
+      - "5000:5000"
+    depends_on:
+      - database
+    networks:
+      - tea_network
+
+volumes:
+  postgres_data:
+
+networks:
+  tea_network:
+    driver: bridge
